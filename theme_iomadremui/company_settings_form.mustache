@@ -1,0 +1,101 @@
+{{!
+    Company settings form template
+}}
+<div class="company-settings-container">
+    <div class="settings-header">
+        <h2>{{#str}}editcompanysettings, theme_iomadremui{{/str}}</h2>
+        <p class="text-muted">{{#str}}companysettingsdesc, theme_iomadremui{{/str}}</p>
+    </div>
+
+    <div class="settings-tabs">
+        {{#tabs}}
+        <a href="?companyid={{companyid}}&tab={{.}}" class="settings-tab {{#equals . currenttab}}active{{/equals}}" data-tab="{{.}}">
+            {{#str}}{{.}}settings, theme_iomadremui{{/str}}
+        </a>
+        {{/tabs}}
+    </div>
+
+    <form method="post" action="{{{formaction}}}" class="settings-form" enctype="multipart/form-data">
+        <input type="hidden" name="sesskey" value="{{sesskey}}">
+        <input type="hidden" name="companyid" value="{{companyid}}">
+        <input type="hidden" name="tab" value="{{currenttab}}">
+
+        <div class="tab-content">
+            {{#tabdata.fields}}
+            <div class="form-group">
+                <label for="{{@key}}">{{#str}}{{@key}}, theme_iomadremui{{/str}}</label>
+                
+                {{#equals type "text"}}
+                <input type="text" id="{{@key}}" name="{{@key}}" class="form-control" value="{{value}}">
+                {{/equals}}
+                
+                {{#equals type "textarea"}}
+                <textarea id="{{@key}}" name="{{@key}}" class="form-control" rows="4">{{value}}</textarea>
+                {{/equals}}
+                
+                {{#equals type "color"}}
+                <div class="color-input-group">
+                    <input type="color" id="{{@key}}" name="{{@key}}" class="form-control" value="{{value}}">
+                    <input type="text" class="form-control" value="{{value}}" placeholder="#000000">
+                    <div class="color-preview" style="background-color: {{value}};"></div>
+                </div>
+                {{/equals}}
+                
+                {{#equals type "number"}}
+                <input type="number" id="{{@key}}" name="{{@key}}" class="form-control" value="{{value}}" 
+                       min="{{min}}" max="{{max}}" step="{{step}}">
+                {{/equals}}
+                
+                {{#equals type "select"}}
+                <select id="{{@key}}" name="{{@key}}" class="form-control">
+                    {{#options}}
+                    <option value="{{.}}" {{#equals . ../value}}selected{{/equals}}>{{.}}</option>
+                    {{/options}}
+                </select>
+                {{/equals}}
+                
+                {{#equals type "checkbox"}}
+                <div class="form-check">
+                    <input type="checkbox" id="{{@key}}" name="{{@key}}" class="form-check-input" 
+                           value="1" {{#value}}checked{{/value}}>
+                    <label class="form-check-label" for="{{@key}}">
+                        {{#str}}{{@key}}_enable, theme_iomadremui{{/str}}
+                    </label>
+                </div>
+                {{/equals}}
+                
+                {{#equals type "file"}}
+                <div class="file-upload-area">
+                    <input type="file" id="{{@key}}" name="{{@key}}" accept="image/*">
+                    <div class="upload-text">
+                        <i class="fa fa-cloud-upload"></i>
+                        <p>{{#str}}dragdropupload, theme_iomadremui{{/str}}</p>
+                        <button type="button" class="btn btn-outline-primary" onclick="document.getElementById('{{@key}}').click();">
+                            {{#str}}selectfile, theme_iomadremui{{/str}}
+                        </button>
+                    </div>
+                    {{#value}}
+                    <div class="current-file">
+                        <img src="{{value}}" alt="Current file" style="max-height: 100px;">
+                    </div>
+                    {{/value}}
+                </div>
+                {{/equals}}
+                
+                {{#equals type "editor"}}
+                <div id="{{@key}}_editor" class="editor-container">
+                    <textarea id="{{@key}}" name="{{@key}}" class="form-control" rows="6">{{value}}</textarea>
+                </div>
+                {{/equals}}
+                
+                <small class="form-text text-muted">{{#str}}{{@key}}_desc, theme_iomadremui{{/str}}</small>
+            </div>
+            {{/tabdata.fields}}
+        </div>
+
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">{{#str}}savechanges, core{{/str}}</button>
+            <a href="{{backurl}}" class="btn btn-secondary">{{#str}}cancel, core{{/str}}</a>
+        </div>
+    </form>
+</div>

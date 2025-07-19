@@ -1,0 +1,11 @@
+{{!
+    Company selector dropdown component
+}}
+<div class="company-selector-wrapper">
+    <label for="company-selector">{{#str}}selectcompany, theme_iomadremui{{/str}}</label>
+    <select id="company-selector" class="form-control" name="companyid">
+        {{#companies}}
+        <option value="{{id}}" {{#selected}}selected{{/selected}}>{{name}}</option>
+        {{/companies}}
+    </select>
+</div>

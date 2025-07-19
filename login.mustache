@@ -1,0 +1,103 @@
+{{!
+    Login page template with company customizations
+}}
+<!DOCTYPE html>
+<html {{{ output.htmlattributes }}}>
+<head>
+    <title>{{{ output.page_title }}}</title>
+    <link rel="shortcut icon" href="{{{ output.favicon }}}" />
+    {{{ output.standard_head_html }}}
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {{#company}}
+    <style>
+    .login-company-{{id}} {
+        {{#background}}
+        background-image: url('{{{background}}}');
+        background-size: cover;
+        background-position: center;
+        {{/background}}
+    }
+
+    .login-company-{{id}} .login-container {
+        {{#primarycolor}}
+        --primary-color: {{primarycolor}};
+        {{/primarycolor}}
+    }
+
+    {{#login_style}}
+    .login-container {
+        {{#eq login_style "centered"}}
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        {{/eq}}
+    }
+
+    {{#eq login_style "split"}}
+    .login-wrapper {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        min-height: 100vh;
+    }
+    .login-content {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .login-image {
+        background: var(--primary-color, #007bff);
+        {{#background}}
+        background-image: url('{{{background}}}');
+        background-size: cover;
+        background-position: center;
+        {{/background}}
+    }
+    {{/eq}}
+    {{/login_style}}
+    </style>
+    {{/company}}
+</head>
+
+<body {{{ bodyattributes }}}>
+{{> core/local/toast/wrapper}}
+
+<div id="page-wrapper" class="login-company-{{company.id}}">
+    {{{ output.standard_top_of_body_html }}}
+    
+    {{#company}}
+    {{#eq login_style "split"}}
+    <div class="login-wrapper">
+        <div class="login-image"></div>
+        <div class="login-content">
+    {{/eq}}
+    {{/company}}
+    
+    <div class="login-container">
+        {{#company.logo}}
+        <div class="login-logo text-center mb-4">
+            <img src="{{{company.logo}}}" alt="{{sitename}}" class="img-fluid" style="max-height: 80px;">
+        </div>
+        {{/company.logo}}
+        
+        {{#company.welcome_message}}
+        <div class="welcome-message mb-4">
+            {{{company.welcome_message}}}
+        </div>
+        {{/company.welcome_message}}
+        
+        {{{ output.main_content }}}
+    </div>
+    
+    {{#company}}
+    {{#eq login_style "split"}}
+        </div>
+    </div>
+    {{/eq}}
+    {{/company}}
+
+    {{{ output.standard_end_of_body_html }}}
+</div>
+
+</body>
+</html>

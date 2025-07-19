@@ -1,0 +1,70 @@
+{{!
+    IOMAD RemUI Navbar Template - RemUI-style top navigation
+    Replaces the Boost left drawer with a proper top navbar
+}}
+<nav id="main-navbar" class="navbar navbar-expand-lg navbar-light bg-white shadow-sm fixed-top">
+    <div class="container-fluid">
+        
+        {{! Navbar brand with company logo }}
+        <a class="navbar-brand d-flex align-items-center" href="{{{ siteurl }}}">
+            {{#company.logo}}
+            <img src="{{company.logo}}" alt="{{sitename}}" height="40" class="mr-2">
+            {{/company.logo}}
+            {{^company.logo}}
+            <span class="site-name">{{sitename}}</span>
+            {{/company.logo}}
+        </a>
+
+        {{! Mobile hamburger }}
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-navigation" aria-controls="main-navigation" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        {{! Primary navigation with Dashboard, My Courses, etc. }}
+        <div class="collapse navbar-collapse" id="main-navigation">
+            <ul class="navbar-nav mr-auto">
+                {{#primarynavigation}}
+                <li class="nav-item {{#isactive}}active{{/isactive}}">
+                    <a class="nav-link" href="{{{url}}}">
+                        {{text}}
+                        {{#isactive}}<span class="sr-only">(current)</span>{{/isactive}}
+                    </a>
+                </li>
+                {{/primarynavigation}}
+                
+                {{! Custom menu items if any }}
+                {{#custommenu}}
+                {{{ custommenu }}}
+                {{/custommenu}}
+            </ul>
+
+            {{! Right side navigation }}
+            <ul class="navbar-nav">
+                {{! Language menu }}
+                {{#langmenu}}
+                <li class="nav-item">
+                    {{{ langmenu }}}
+                </li>
+                {{/langmenu}}
+                
+                {{! User menu }}
+                <li class="nav-item">
+                    {{{ usermenu }}}
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+{{! Add some top padding to body to account for fixed navbar }}
+<style>
+body {
+    padding-top: 70px; /* Adjust based on navbar height */
+}
+
+@media (max-width: 768px) {
+    body {
+        padding-top: 60px;
+    }
+}
+</style>
