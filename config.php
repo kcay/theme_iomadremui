@@ -17,10 +17,12 @@ $THEME->enable_dock = true;
 
 // Page layouts - FIXED with defaultregion for all layouts
 $THEME->layouts = [
-    'base' => [
-        'file' => 'columns2.php',
+ // ADD: Override frontpage layout to handle redirect
+    'frontpage' => [
+        'file' => 'frontpage.php', // Use our custom frontpage layout
         'regions' => ['side-pre'],
         'defaultregion' => 'side-pre',
+        'options' => ['nonavbar' => false],
     ],
     'standard' => [
         'file' => 'columns2.php',
@@ -32,32 +34,10 @@ $THEME->layouts = [
         'regions' => ['side-pre'],
         'defaultregion' => 'side-pre',
     ],
-    'coursecategory' => [
-        'file' => 'columns2.php',
-        'regions' => ['side-pre'],
-        'defaultregion' => 'side-pre',
-    ],
     'incourse' => [
         'file' => 'columns2.php',
         'regions' => ['side-pre'],
         'defaultregion' => 'side-pre',
-    ],
-    'frontpage' => [
-        'file' => 'columns2.php',
-        'regions' => ['side-pre'],
-        'defaultregion' => 'side-pre',
-        'options' => ['nonavbar' => true],
-    ],
-    'admin' => [
-        'file' => 'columns2.php',
-        'regions' => ['side-pre'],
-        'defaultregion' => 'side-pre',
-    ],
-    'mydashboard' => [
-        'file' => 'columns2.php',
-        'regions' => ['side-pre'],
-        'defaultregion' => 'side-pre',
-        'options' => ['nonavbar' => true, 'langmenu' => true],
     ],
     'mypublic' => [
         'file' => 'columns2.php',

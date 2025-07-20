@@ -19,3 +19,17 @@ $font-size-base: 0.9375rem !default;
 
 // RemUI specific styles
 @import "../remui";
+
+@media (min-width: 768px) {
+    body.limitedwidth #page.drawers .main-inner{
+        max-width: 100% !important;
+    }
+}
+
+/* boost: hide the Home tab */
+.primary-navigation li:nth-child(1) {
+  display: none !important;
+}
+
+
+

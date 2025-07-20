@@ -210,27 +210,57 @@ function theme_iomadremui_process_css($css, $theme) {
     if ($companyid) {
         $companyconfig = theme_iomadremui_get_company_config($companyid);
         
+        // Add company body class styles automatically
+        $css .= "\n/* Company {$companyid} Styles */\n";
+        
+        // Create automatic body class styles for the company
+        $css .= "body.company-{$companyid},\n";
+        $css .= ".company-{$companyid},\n";
+        $css .= "[data-company=\"{$companyid}\"] {\n";
+        
         // Primary color
         if (isset($companyconfig['primarycolor'])) {
+            $css .= "  --bs-primary: {$companyconfig['primarycolor']} !important;\n";
+            $css .= "  --primary: {$companyconfig['primarycolor']} !important;\n";
             $css = str_replace('[[setting:primarycolor]]', $companyconfig['primarycolor'], $css);
-            $css = theme_iomadremui_set_color_variables($css, 'primary', $companyconfig['primarycolor']);
         }
         
         // Secondary color
         if (isset($companyconfig['secondarycolor'])) {
+            $css .= "  --bs-secondary: {$companyconfig['secondarycolor']} !important;\n";
+            $css .= "  --secondary: {$companyconfig['secondarycolor']} !important;\n";
             $css = str_replace('[[setting:secondarycolor]]', $companyconfig['secondarycolor'], $css);
-            $css = theme_iomadremui_set_color_variables($css, 'secondary', $companyconfig['secondarycolor']);
-        }
-        
-        // Custom CSS
-        if (isset($companyconfig['customcss'])) {
-            $css .= "\n/* Company Custom CSS */\n" . $companyconfig['customcss'];
         }
         
         // Font family
         if (isset($companyconfig['fontfamily'])) {
+            $css .= "  font-family: {$companyconfig['fontfamily']} !important;\n";
             $css = str_replace('[[setting:fontfamily]]', $companyconfig['fontfamily'], $css);
         }
+        
+        $css .= "}\n";
+        
+        // Course layout specific styles
+        $courselayout = isset($companyconfig['course_layout']) ? $companyconfig['course_layout'] : 'card';
+        $css .= "\n/* Company {$companyid} Course Layout: {$courselayout} */\n";
+        $css .= ".company-{$companyid} .frontpage-course-list-all,\n";
+        $css .= ".company-{$companyid}.course-layout-{$courselayout} {\n";
+        $css .= "  /* Course layout specific styles will be applied via CSS classes */\n";
+        $css .= "}\n";
+        
+        // Custom CSS
+        if (isset($companyconfig['customcss'])) {
+            $css .= "\n/* Company {$companyid} Custom CSS */\n";
+            $css .= "body.company-{$companyid} {\n";
+            $css .= $companyconfig['customcss'];
+            $css .= "\n}\n";
+        }
+    }
+    
+    // Add JavaScript to automatically add body classes
+    $css .= "\n/* Auto-add company body classes via CSS */\n";
+    if ($companyid) {
+        // This will be handled by JavaScript since we can't modify body classes in CSS processing
     }
     
     // Default fallbacks
@@ -390,6 +420,37 @@ function theme_iomadremui_get_main_scss_content($theme) {
     }
 
     return $scss;
+}
+
+function theme_iomadremui_before_footer() {
+    global $PAGE, $CFG;
+    
+    if (isloggedin()) {
+        $companyid = iomad::get_my_companyid(context_system::instance());
+        if ($companyid) {
+            $tenantconfig = new \theme_iomadremui\tenant_config($companyid);
+            $courselayout = $tenantconfig->get_config('course_layout', 'card');
+            
+            $js = "
+            // Add company body classes via JavaScript
+            document.addEventListener('DOMContentLoaded', function() {
+                var body = document.body;
+                if (body) {
+                    body.classList.add('company-{$companyid}');
+                    body.classList.add('course-layout-{$courselayout}');
+                    
+                    // Also add to containers that might need company styling
+                    var containers = document.querySelectorAll('.frontpage-course-list-all, .course-content, .coursecat-content');
+                    containers.forEach(function(container) {
+                        container.classList.add('company-{$companyid}');
+                    });
+                }
+            });
+            ";
+            
+            $PAGE->requires->js_init_code($js);
+        }
+    }
 }
 
 /**
@@ -556,4 +617,38 @@ function theme_iomadremui_copy_company_settings($fromcompanyid, $tocompanyid) {
     }
     
     return true;
+}
+
+function theme_iomadremui_extend_navigation(global_navigation $nav) {
+    if (isset($nav->home)) {
+        unset($nav->home);
+    }
+}
+
+/**
+ * ENHANCED: Early page init to add company context
+ */
+function theme_iomadremui_page_init(moodle_page $page) {
+    global $CFG;
+
+    
+    // Add company-specific JavaScript for body classes
+    if (isloggedin()) {
+        $companyid = iomad::get_my_companyid(context_system::instance());
+        if ($companyid) {
+            // Add JavaScript that runs immediately to add classes
+            $page->requires->js_init_code("
+                (function() {
+                    // Add company classes as early as possible
+                    if (document.body) {
+                        document.body.classList.add('company-{$companyid}');
+                    } else {
+                        document.addEventListener('DOMContentLoaded', function() {
+                            document.body.classList.add('company-{$companyid}');
+                        });
+                    }
+                })();
+            ");
+        }
+    }
 }

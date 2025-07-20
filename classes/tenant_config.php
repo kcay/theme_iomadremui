@@ -265,6 +265,18 @@ class tenant_config {
                         'description' => get_string('show_progress_desc', 'theme_iomadremui'),
                         'default' => 1
                     ],
+                    'show_company_logo_on_courses' => [
+                        'type' => 'checkbox',
+                        'label' => get_string('show_company_logo_on_courses', 'theme_iomadremui'),
+                        'description' => get_string('show_company_logo_on_courses_desc', 'theme_iomadremui'),
+                        'default' => 1
+                    ],
+                    'show_company_header_on_frontpage' => [
+                        'type' => 'checkbox',
+                        'label' => get_string('show_company_header_on_frontpage', 'theme_iomadremui'),
+                        'description' => get_string('show_company_header_on_frontpage_desc', 'theme_iomadremui'),
+                        'default' => 1
+                    ],
                     'course_sidebar' => [
                         'type' => 'select',
                         'label' => get_string('course_sidebar', 'theme_iomadremui'),

@@ -137,6 +137,19 @@ if (isloggedin()) {
     }
 }
 
+// Secondary navigation
+$secondarynavigation = null;
+$overflow = null;
+if ($PAGE->has_secondary_navigation()) {
+    $tablistnav = $PAGE->has_tablist_secondary_navigation();
+    $moremenu = new \core\navigation\output\more_menu($PAGE->secondarynav, 'nav-tabs', true, $tablistnav);
+    $secondarynavigation = $moremenu->export_for_template($OUTPUT);
+    $overflowdata = $PAGE->secondarynav->get_overflow_menu_data();
+    if (!is_null($overflowdata)) {
+        $overflow = $overflowdata->export_for_template($OUTPUT);
+    }
+}
+
 // Company-specific data
 $companydata = [];
 if ($companyconfig || $company_selection_required) {
@@ -179,6 +192,8 @@ $templatecontext = [
     'hasregionmainsettingsmenu' => !empty($regionmainsettingsmenu),
     'primarynavigation' => $primarynavigation,
     'containerclass' => $containerclass,
+    'hassecondarynav' => !empty($secondarynavigation),
+    'secondarynavigation' => $secondarynavigation,
     'company' => $companydata,
     'usermenu' => $navigationdata['usermenu'],
     'langmenu' => $navigationdata['langmenu'],
@@ -187,3 +202,5 @@ $templatecontext = [
 ];
 
 echo $OUTPUT->render_from_template('theme_iomadremui/columns2', $templatecontext);
+
+

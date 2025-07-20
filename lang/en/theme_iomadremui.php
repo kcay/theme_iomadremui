@@ -529,3 +529,18 @@ $string['tab:footer'] = 'Footer';
 $string['tab:mobile'] = 'Mobile';
 $string['tab:performance'] = 'Performance';
 $string['tab:accessibility'] = 'Accessibility';
+
+
+// Course-related strings
+$string['nocoursesavailable'] = 'No Courses Available';
+$string['nocompanycourses'] = 'No courses are currently available for {$a}';
+$string['companycourses'] = '{$a} Courses';
+$string['viewallcompanycourses'] = 'View All {$a} Courses';
+
+// Company settings for courses
+$string['show_company_logo_on_courses'] = 'Show Company Logo on Courses';
+$string['show_company_logo_on_courses_desc'] = 'Display the company logo on course cards and listings';
+$string['show_company_header_on_frontpage'] = 'Show Company Header on Frontpage';
+$string['show_company_header_on_frontpage_desc'] = 'Display company name and logo header on the frontpage course listing';
+$string['course_company_branding'] = 'Course Company Branding';
+$string['course_company_branding_desc'] = 'Enable company-specific branding on course pages';

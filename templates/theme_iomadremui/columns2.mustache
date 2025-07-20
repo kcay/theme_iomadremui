@@ -235,6 +235,9 @@
     {{! Main page content with proper container structure }}
     <div id="page" class="main-area-bg">
         <div class="main-inner">
+
+           
+
             <div class="{{containerclass}}">
                 
                 {{! CRITICAL: Company selection error badge (like theme_iomadboost) }}
@@ -255,6 +258,19 @@
                 <div id="page-header" class="d-print-none">
                     {{{ output.full_header }}}
                 </div>
+
+                
+                 {{! Render secondary navigation using the moremenu partial }}
+                {{# hassecondarynav }}
+                    <div class="secondary-navigation edw-tabs-navigation d-print-none">
+                       
+                    
+                            {{# secondarynavigation }}
+                                {{> core/moremenu }}
+                            {{/ secondarynavigation }}
+                    
+                    </div>
+                {{/ hassecondarynav }}
 
                 {{! Region top blocks wrapped in container }}
                 <section id="region-top-blocks">
