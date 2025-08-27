@@ -1,0 +1,415 @@
+{{!
+    FIXED: IOMAD RemUI columns2 template with company selection error badge
+    Shows error message instead of redirecting when no company is selected
+}}
+{{> theme_boost/head }}
+
+<body {{{ bodyattributes }}}>
+{{> core/local/toast/wrapper}}
+
+{{! Company-specific CSS }}
+{{#company}}
+<style>
+:root {
+    --primary: {{primarycolor}};
+    --secondary: {{secondarycolor}};
+    --bs-primary: {{primarycolor}};
+    --bs-secondary: {{secondarycolor}};
+}
+{{#customcss}}
+{{{customcss}}}
+{{/customcss}}
+</style>
+{{/company}}
+
+{{! Enhanced CSS with error badge styles }}
+<style>
+/* Company selection error badge styles */
+.company-selection-error {
+    background: linear-gradient(135deg, #dc3545, #c82333);
+    color: white;
+    padding: 1rem 1.5rem;
+    border-radius: 0.5rem;
+    margin: 1rem 0;
+    border-left: 4px solid #a71e2a;
+    box-shadow: 0 0.25rem 0.75rem rgba(220, 53, 69, 0.3);
+    animation: pulse 2s infinite;
+}
+
+.company-selection-error .error-icon {
+    font-size: 1.2rem;
+    margin-right: 0.5rem;
+}
+
+.company-selection-error .error-title {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.company-selection-error .error-message {
+    margin-bottom: 0;
+}
+
+@keyframes pulse {
+    0% { box-shadow: 0 0.25rem 0.75rem rgba(220, 53, 69, 0.3); }
+    50% { box-shadow: 0 0.25rem 1rem rgba(220, 53, 69, 0.5); }
+    100% { box-shadow: 0 0.25rem 0.75rem rgba(220, 53, 69, 0.3); }
+}
+
+/* Right blocks drawer styles */
+.blocks-drawer {
+    position: fixed;
+    top: 0;
+    right: -380px;
+    width: 360px;
+    height: 100vh;
+    background: #fff;
+    box-shadow: -2px 0 10px rgba(0,0,0,0.1);
+    transition: right 0.3s ease;
+    z-index: 1040;
+    overflow-y: auto;
+    border-left: 1px solid #dee2e6;
+}
+
+.blocks-drawer.show {
+    right: 0;
+}
+
+.blocks-drawer-header {
+    padding: 1rem;
+    border-bottom: 1px solid #dee2e6;
+    background: #f8f9fa;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+}
+
+.blocks-drawer-content {
+    padding: 1rem;
+}
+
+.blocks-toggle {
+    position: fixed;
+    top: 50%;
+    right: 20px;
+    transform: translateY(-50%);
+    z-index: 1050;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: var(--bs-primary, #007bff);
+    color: white;
+    border: none;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    transition: all 0.3s ease;
+}
+
+.blocks-toggle:hover {
+    background: var(--bs-primary, #0056b3);
+    transform: translateY(-50%) scale(1.1);
+}
+
+.blocks-toggle.active {
+    right: 380px;
+}
+
+.drawer-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    z-index: 1039;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+.drawer-backdrop.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+@media (max-width: 768px) {
+    .blocks-drawer {
+        width: 100%;
+        right: -100%;
+    }
+    
+    .blocks-toggle.active {
+        right: 20px;
+    }
+}
+
+.main-area-bg:not(.pagelayout-login) div[role="main"] {
+    background: #fff;
+    padding: 32px;
+    border-radius: 8px;
+    box-shadow: 0 13px 37px rgb(92 107 121 / .1);
+}
+</style>
+
+<div id="page-wrapper" class="d-print-block">
+
+    {{{ output.standard_top_of_body_html }}}
+
+    {{! FIXED: Company selector bar with proper form submission }}
+    {{#company.show_company_selector}}
+    <div class="company-selector-bar bg-light border-bottom py-2">
+        <div class="{{containerclass}}">
+            <div class="d-flex justify-content-end align-items-center">
+                <form method="post" action="" class="d-flex align-items-center m-0">
+                    <input type="hidden" name="sesskey" value="{{sesskey}}">
+                    <input type="hidden" name="switch_company" value="1">
+                    <span class="mr-2 small text-muted">{{#str}}selectcompany, theme_iomadremui{{/str}}:</span>
+                    <select id="company-selector" name="companyid" class="form-control form-control-sm" style="width: auto;" onchange="this.form.submit();">
+                        <option value="">{{#str}}selectcompany, theme_iomadremui{{/str}}</option>
+                        {{#company.companies}}
+                        <option value="{{id}}" {{#selected}}selected{{/selected}}>{{name}}</option>
+                        {{/company.companies}}
+                    </select>
+                </form>
+            </div>
+        </div>
+    </div>
+    {{/company.show_company_selector}}
+
+    {{! RemUI-style top navbar }}
+    <nav id="main-navbar" class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+        <div class="{{containerclass}}">
+            
+            {{! Navbar brand with company logo }}
+            <a class="navbar-brand d-flex align-items-center" href="{{{ config.wwwroot }}}">
+                {{#company.logo}}
+                <img src="{{company.logo}}" alt="{{sitename}}" height="40" class="mr-2">
+                {{/company.logo}}
+                {{^company.logo}}
+                <span class="site-name">{{sitename}}</span>
+                {{/company.logo}}
+            </a>
+
+            {{! Mobile hamburger }}
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-navigation" aria-controls="main-navigation" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            {{! Primary navigation }}
+            <div class="collapse navbar-collapse" id="main-navigation">
+                <ul class="navbar-nav mr-auto">
+                    {{#primarynavigation}}
+                    <li class="nav-item {{#isactive}}active{{/isactive}}">
+                        <a class="nav-link" href="{{{url}}}">
+                            {{text}}
+                            {{#isactive}}<span class="sr-only">(current)</span>{{/isactive}}
+                        </a>
+                    </li>
+                    {{/primarynavigation}}
+                    
+                    {{! Custom menu items if any }}
+                    {{{ output.custom_menu }}}
+                </ul>
+
+                {{! Right side navigation }}
+                <ul class="navbar-nav">
+                    {{! Language menu }}
+                    {{#langmenu}}
+                    <li class="nav-item">
+                        {{{ langmenu }}}
+                    </li>
+                    {{/langmenu}}
+                    
+                    {{! User menu }}
+                    <li class="nav-item">
+                        {{{ usermenu }}}
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    {{! Main page content with proper container structure }}
+    <div id="page" class="main-area-bg">
+        <div class="main-inner">
+
+           
+
+            <div class="{{containerclass}}">
+                
+                {{! CRITICAL: Company selection error badge (like theme_iomadboost) }}
+                {{#company.selection_required}}
+                <div class="company-selection-error alert alert-danger d-flex align-items-center" role="alert">
+                    <i class="fa fa-exclamation-triangle error-icon" aria-hidden="true"></i>
+                    <div>
+                        <div class="error-title">{{#str}}selectcompany, theme_iomadremui{{/str}}</div>
+                        <div class="error-message">{{company.selection_message}}</div>
+                        {{#company.show_company_selector}}
+                        <small class="mt-2 d-block">{{#str}}usecompanyselector, theme_iomadremui{{/str}}</small>
+                        {{/company.show_company_selector}}
+                    </div>
+                </div>
+                {{/company.selection_required}}
+                
+                {{! Page header wrapped in container }}
+                <div id="page-header" class="d-print-none">
+                    {{{ output.full_header }}}
+                </div>
+
+                
+                 {{! Render secondary navigation using the moremenu partial }}
+                {{# hassecondarynav }}
+                    <div class="secondary-navigation edw-tabs-navigation d-print-none">
+                       
+                    
+                            {{# secondarynavigation }}
+                                {{> core/moremenu }}
+                            {{/ secondarynavigation }}
+                    
+                    </div>
+                {{/ hassecondarynav }}
+
+                {{! Region top blocks wrapped in container }}
+                <section id="region-top-blocks">
+                    
+                    {{! Region main box wrapped in container }}
+                    <div id="region-main-box" class="w-100">
+                        
+                        {{! Main content area }}
+                        <section id="region-main" class="w-100" aria-label="{{#str}}content{{/str}}">
+                            
+                            {{#hasregionmainsettingsmenu}}
+                            <div id="region-main-settings-menu" class="d-print-none mb-3">
+                                <div> {{{ regionmainsettingsmenu }}} </div>
+                            </div>
+                            {{/hasregionmainsettingsmenu}}
+                            
+                            {{{ output.course_content_header }}}
+                            {{{ output.main_content }}}
+                            {{{ output.activity_navigation }}}
+                            {{{ output.course_content_footer }}}
+                            
+                        </section>
+                        
+                    </div>
+                </section>
+
+                {{! Page content wrapped in container }}
+                <div id="page-content" class="pb-3 d-print-block">
+                    {{! Additional content can go here }}
+                </div>
+                
+            </div>
+        </div>
+    </div>
+
+    {{! Right blocks drawer }}
+    {{#hasblocks}}
+    <button class="blocks-toggle {{#rightdraweropen}}active{{/rightdraweropen}}" 
+            id="blocks-drawer-toggle" 
+            data-toggle="drawer"
+            aria-label="{{#str}}toggleblocks, theme_iomadremui{{/str}}"
+            title="{{#str}}toggleblocks, theme_iomadremui{{/str}}">
+        <i class="fa fa-th-large" aria-hidden="true"></i>
+    </button>
+
+    <div class="blocks-drawer {{#rightdraweropen}}show{{/rightdraweropen}}" id="blocks-drawer">
+        <div class="blocks-drawer-header d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">{{#str}}blocks{{/str}}</h5>
+            <button class="btn btn-sm btn-outline-secondary" id="blocks-drawer-close">
+                <i class="fa fa-times" aria-hidden="true"></i>
+            </button>
+        </div>
+        <div class="blocks-drawer-content">
+            {{{ sidepreblocks }}}
+        </div>
+    </div>
+
+    <div class="drawer-backdrop {{#rightdraweropen}}show{{/rightdraweropen}}" id="drawer-backdrop"></div>
+    {{/hasblocks}}
+
+    {{{ output.standard_after_main_region_html }}}
+    
+    {{! Company footer with container }}
+    {{#company.footer_content}}
+    <div class="company-footer bg-light border-top mt-4 py-3">
+        <div class="{{containerclass}}">
+            {{{company.footer_content}}}
+        </div>
+    </div>
+    {{/company.footer_content}}
+    
+    {{{ output.standard_footer_html }}}
+    {{{ output.standard_end_of_body_html }}}
+
+</div>
+
+{{! Simplified JavaScript }}
+<script>
+require(['jquery'], function($) {
+    // Mobile navigation toggle
+    $('.navbar-toggler').on('click', function() {
+        $('#main-navigation').toggleClass('show');
+    });
+    
+    // Blocks drawer functionality
+    var $blocksDrawer = $('#blocks-drawer');
+    var $blocksToggle = $('#blocks-drawer-toggle');
+    var $backdrop = $('#drawer-backdrop');
+    var $body = $('body');
+    
+    function toggleBlocksDrawer() {
+        var isOpen = $blocksDrawer.hasClass('show');
+        
+        if (isOpen) {
+            closeBlocksDrawer();
+        } else {
+            openBlocksDrawer();
+        }
+    }
+    
+    function openBlocksDrawer() {
+        $blocksDrawer.addClass('show');
+        $blocksToggle.addClass('active');
+        $backdrop.addClass('show');
+        $body.addClass('drawer-open-right');
+        
+        if (typeof M !== 'undefined' && M.util && M.util.set_user_preference) {
+            M.util.set_user_preference('drawer-open-blocks', 'true');
+        }
+    }
+    
+    function closeBlocksDrawer() {
+        $blocksDrawer.removeClass('show');
+        $blocksToggle.removeClass('active');
+        $backdrop.removeClass('show');
+        $body.removeClass('drawer-open-right');
+        
+        if (typeof M !== 'undefined' && M.util && M.util.set_user_preference) {
+            M.util.set_user_preference('drawer-open-blocks', 'false');
+        }
+    }
+    
+    $blocksToggle.on('click', toggleBlocksDrawer);
+    $('#blocks-drawer-close').on('click', closeBlocksDrawer);
+    $backdrop.on('click', closeBlocksDrawer);
+    
+    $(document).on('keydown', function(e) {
+        if (e.key === 'Escape' && $blocksDrawer.hasClass('show')) {
+            closeBlocksDrawer();
+        }
+    });
+    
+    $(window).on('resize', function() {
+        if ($(window).width() < 768 && $blocksDrawer.hasClass('show')) {
+            closeBlocksDrawer();
+        }
+    });
+});
+</script>
+
+</body>
+</html>

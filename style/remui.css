@@ -1,0 +1,5 @@
+@media (min-width: 768px) {
+    body.limitedwidth #page.drawers .main-inner{
+        max-width: 100% !important;
+    }
+}

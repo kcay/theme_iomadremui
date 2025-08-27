@@ -1,0 +1,530 @@
+// IOMAD RemUI Theme - Clean SCSS (Error-Free)
+
+// Variables
+$navbar-height: 70px;
+$mobile-navbar-height: 60px;
+$drawer-width: 380px;
+$container-padding: 15px;
+$border-radius: 0.375rem;
+$box-shadow-light: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+$box-shadow-hover: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+
+// Top navbar styling (RemUI-style)
+.navbar {
+    border-bottom: 1px solid #dee2e6;
+    backdrop-filter: blur(10px);
+    
+    .navbar-brand {
+        img {
+            max-height: 40px;
+            width: auto;
+        }
+        
+        .site-name {
+            font-weight: 600;
+            color: var(--bs-primary, #007bff);
+        }
+    }
+    
+    .navbar-nav {
+        .nav-link {
+            font-weight: 500;
+            padding: 0.75rem 1rem;
+            border-radius: $border-radius;
+            margin: 0 0.25rem;
+            transition: all 0.3s ease;
+            
+            &:hover {
+                background-color: rgba(var(--bs-primary-rgb, 0, 123, 255), 0.1);
+                color: var(--bs-primary, #007bff);
+            }
+            
+            &.active {
+                background-color: var(--bs-primary, #007bff);
+                color: white;
+            }
+        }
+    }
+}
+
+// Main content area styling (RemUI-style)
+.main-area-bg {
+    background: #f8f9fa;
+    min-height: calc(100vh - #{$navbar-height});
+    
+    .main-inner {
+        padding: 2rem 0;
+        
+        .container,
+        .container-fluid {
+            background: transparent;
+        }
+    }
+    
+    // Content cards styling
+    &:not(.pagelayout-login) {
+        div[role="main"],
+        #region-main {
+            background: #fff;
+            padding: 2rem;
+            border-radius: $border-radius;
+            box-shadow: $box-shadow-light;
+            margin-bottom: 1rem;
+        }
+    }
+}
+
+// Container structure styling
+#page {
+    .main-inner {
+        #page-header {
+            background: transparent;
+            padding: 1rem 0;
+            
+            .page-header-headings h1 {
+                color: var(--bs-dark, #343a40);
+                margin-bottom: 0.5rem;
+            }
+        }
+        
+        #region-top-blocks {
+            margin-bottom: 1rem;
+        }
+        
+        #region-main-box {
+            #region-main {
+                min-height: 400px;
+            }
+        }
+    }
+}
+
+// Dashboard layouts
+.dashboard-layout {
+    &.layout-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 1.5rem;
+    }
+    
+    &.layout-list {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    &.layout-cards {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1.5rem;
+        
+        .card {
+            flex: 1;
+            min-width: 280px;
+            box-shadow: $box-shadow-light;
+            border: 1px solid rgba(0, 0, 0, 0.125);
+            transition: all 0.3s ease;
+            
+            &:hover {
+                box-shadow: $box-shadow-hover;
+                transform: translateY(-2px);
+            }
+        }
+    }
+}
+
+// Course page customizations
+.course-header {
+    &.header-banner {
+        background: linear-gradient(135deg, var(--bs-primary, #007bff), var(--bs-secondary, #6c757d));
+        color: white;
+        padding: 2rem;
+        border-radius: $border-radius;
+        margin-bottom: 1.5rem;
+        
+        h1 {
+            color: white;
+            margin-bottom: 0.5rem;
+        }
+    }
+    
+    &.header-minimal {
+        border-bottom: 2px solid var(--bs-primary, #007bff);
+        padding-bottom: 1rem;
+        margin-bottom: 1.5rem;
+    }
+}
+
+// Progress indicators
+.progress-indicator {
+    .progress {
+        height: 8px;
+        border-radius: 4px;
+        background-color: #e9ecef;
+    }
+    
+    .progress-bar {
+        transition: width 0.6s ease;
+        background: linear-gradient(90deg, var(--bs-success, #28a745), var(--bs-info, #17a2b8));
+    }
+}
+
+// Company-specific styling
+.company-selector-bar {
+    background: linear-gradient(90deg, #f8f9fa, #e9ecef);
+    border-bottom: 1px solid #dee2e6;
+    
+    select {
+        border: 1px solid #ced4da;
+        border-radius: $border-radius;
+        
+        &:focus {
+            border-color: var(--bs-primary, #007bff);
+            box-shadow: 0 0 0 0.2rem rgba(var(--bs-primary-rgb, 0, 123, 255), 0.25);
+        }
+    }
+}
+
+// Right blocks drawer
+.blocks-drawer {
+    position: fixed;
+    top: 0;
+    right: -#{$drawer-width};
+    width: #{$drawer-width - 20px};
+    height: 100vh;
+    background: #fff;
+    box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
+    transition: right 0.3s ease;
+    z-index: 1040;
+    overflow-y: auto;
+    border-left: 1px solid #dee2e6;
+    backdrop-filter: blur(1px);
+    
+    &.show {
+        right: 0;
+        animation: slideInRight 0.3s ease-out;
+    }
+    
+    .blocks-drawer-header {
+        padding: 1rem;
+        border-bottom: 1px solid #dee2e6;
+        background: var(--bs-light, #f8f9fa);
+        position: sticky;
+        top: 0;
+        z-index: 1;
+    }
+    
+    .blocks-drawer-content {
+        padding: 1rem;
+        
+        .block {
+            margin-bottom: 1rem;
+            border: 1px solid #dee2e6;
+            border-radius: $border-radius;
+            
+            .block_tree {
+                .tree_item {
+                    padding: 0.25rem 0.5rem;
+                    
+                    &:hover {
+                        background-color: #f8f9fa;
+                    }
+                }
+            }
+        }
+    }
+}
+
+@keyframes slideInRight {
+    from {
+        right: -#{$drawer-width};
+        opacity: 0;
+    }
+    to {
+        right: 0;
+        opacity: 1;
+    }
+}
+
+.blocks-toggle {
+    position: fixed;
+    top: 50%;
+    right: 20px;
+    transform: translateY(-50%);
+    z-index: 1050;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: var(--bs-primary, #007bff);
+    color: white;
+    border: none;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    transition: all 0.3s ease;
+    
+    &:hover {
+        background: var(--bs-primary, #0056b3);
+        transform: translateY(-50%) scale(1.1);
+    }
+    
+    &:focus {
+        outline: 2px solid var(--bs-primary, #007bff);
+        outline-offset: 2px;
+    }
+    
+    &:active {
+        transform: translateY(-50%) scale(0.95);
+    }
+    
+    &.active {
+        right: #{$drawer-width};
+    }
+}
+
+.drawer-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1039;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    
+    &.show {
+        opacity: 1;
+        visibility: visible;
+    }
+}
+
+// Form styling enhancements
+.form-group {
+    margin-bottom: 1.5rem;
+    
+    label {
+        font-weight: 600;
+        color: var(--bs-dark, #343a40);
+        margin-bottom: 0.5rem;
+    }
+    
+    .form-control {
+        border-radius: $border-radius;
+        border: 1px solid #ced4da;
+        padding: 0.75rem;
+        
+        &:focus {
+            border-color: var(--bs-primary, #007bff);
+            box-shadow: 0 0 0 0.2rem rgba(var(--bs-primary-rgb, 0, 123, 255), 0.25);
+        }
+    }
+    
+    .form-text {
+        font-size: 0.875rem;
+        color: #6c757d;
+        margin-top: 0.25rem;
+    }
+}
+
+// Card enhancements
+.card {
+    border: 1px solid rgba(0, 0, 0, 0.125);
+    border-radius: $border-radius;
+    box-shadow: $box-shadow-light;
+    transition: all 0.3s ease;
+    
+    &:hover {
+        box-shadow: $box-shadow-hover;
+        transform: translateY(-2px);
+    }
+    
+    .card-header {
+        background: linear-gradient(90deg, var(--bs-primary, #007bff), var(--bs-info, #17a2b8));
+        color: white;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        
+        h3, h4, h5 {
+            color: white;
+            margin-bottom: 0;
+        }
+    }
+    
+    .card-body {
+        padding: 1.5rem;
+    }
+}
+
+// Button enhancements
+.btn {
+    border-radius: $border-radius;
+    font-weight: 500;
+    padding: 0.75rem 1.5rem;
+    transition: all 0.3s ease;
+    
+    &.btn-primary {
+        background: linear-gradient(135deg, var(--bs-primary, #007bff), var(--bs-info, #17a2b8));
+        border: none;
+        
+        &:hover {
+            background: linear-gradient(135deg, var(--bs-info, #17a2b8), var(--bs-primary, #007bff));
+            transform: translateY(-1px);
+            box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.2);
+        }
+    }
+    
+    &.btn-outline-primary {
+        border: 2px solid var(--bs-primary, #007bff);
+        color: var(--bs-primary, #007bff);
+        
+        &:hover {
+            background: var(--bs-primary, #007bff);
+            transform: translateY(-1px);
+        }
+    }
+}
+
+// Responsive design improvements
+@media (max-width: 768px) {
+    body {
+        padding-top: $mobile-navbar-height;
+    }
+    
+    .main-area-bg {
+        min-height: calc(100vh - #{$mobile-navbar-height});
+        
+        .main-inner {
+            padding: 1rem 0;
+        }
+        
+        &:not(.pagelayout-login) {
+            div[role="main"],
+            #region-main {
+                padding: 1rem;
+                margin-bottom: 0.5rem;
+            }
+        }
+    }
+    
+    .dashboard-layout {
+        &.layout-grid {
+            grid-template-columns: 1fr;
+        }
+        
+        &.layout-cards {
+            flex-direction: column;
+            
+            .card {
+                min-width: auto;
+            }
+        }
+    }
+    
+    .navbar-brand img {
+        max-height: 30px;
+    }
+    
+    #page .main-inner #page-header {
+        padding: 0.5rem 0;
+    }
+    
+    .blocks-drawer {
+        width: 100%;
+        right: -100%;
+    }
+    
+    .blocks-toggle.active {
+        right: 20px;
+    }
+}
+
+
+@media (max-width: 576px) {
+    .container-sm,
+    .container-md,
+    .container-lg,
+    .container-xl {
+        padding-left: $container-padding;
+        padding-right: $container-padding;
+    }
+    
+    .main-area-bg:not(.pagelayout-login) {
+        div[role="main"],
+        #region-main {
+            padding: 0.75rem;
+        }
+    }
+}
+
+// Dark mode support
+@media (prefers-color-scheme: dark) {
+    .blocks-drawer {
+        background: #343a40;
+        border-left-color: #495057;
+        
+        .blocks-drawer-header {
+            background: #495057;
+            border-bottom-color: #6c757d;
+        }
+        
+        .blocks-drawer-content {
+            .block {
+                border-color: #495057;
+                background: #495057;
+                
+                .block_tree .tree_item:hover {
+                    background-color: #6c757d;
+                }
+            }
+        }
+    }
+    
+    .main-area-bg {
+        background: #212529;
+        
+        &:not(.pagelayout-login) {
+            div[role="main"],
+            #region-main {
+                background: #343a40;
+                color: white;
+            }
+        }
+    }
+}
+
+// Company-specific overrides (simplified)
+.company-theme {
+    &.custom-primary {
+        --bs-primary: var(--company-primary, #007bff);
+    }
+    
+    &.custom-secondary {
+        --bs-secondary: var(--company-secondary, #6c757d);
+    }
+}
+
+// Utility classes for RemUI
+.remui-shadow {
+    box-shadow: $box-shadow-hover !important;
+}
+
+.remui-rounded {
+    border-radius: $border-radius !important;
+}
+
+.remui-gradient-primary {
+    background: linear-gradient(135deg, var(--bs-primary, #007bff), var(--bs-info, #17a2b8)) !important;
+}
+
+.remui-text-gradient {
+    background: linear-gradient(135deg, var(--bs-primary, #007bff), var(--bs-info, #17a2b8));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+
+

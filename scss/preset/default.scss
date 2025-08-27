@@ -1,0 +1,96 @@
+@import "../../node_modules/bootstrap/scss/bootstrap";
+
+// Variables
+$primary: #007bff !default;
+$secondary: #6c757d !default;
+$success: #28a745 !default;
+$info: #17a2b8 !default;
+$warning: #ffc107 !default;
+$danger: #dc3545 !default;
+$light: #f8f9fa !default;
+$dark: #343a40 !default;
+
+// Font settings
+$font-family-sans-serif: "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !default;
+$font-size-base: 0.9375rem !default;
+
+// IOMAD specific styles
+@import "../iomad";
+
+// RemUI specific styles
+@import "../remui";
+
+@media (min-width: 768px) {
+    body.limitedwidth #page.drawers .main-inner{
+        max-width: 100% !important;
+    }
+}
+
+/* boost: hide the Home tab */
+.primary-navigation li:nth-child(1) {
+  display: none !important;
+}
+
+body.page-mycourses.pagelayout-mycourses #page-wrapper .block_iomad_company_admin, body.page-mycourses.pagelayout-mycourses #inst1 {
+  display:none !important;
+}
+
+.errorcode a{
+    display:none !important;
+}
+
+.navbar-company-item {
+    .nav-link {
+        padding: 0.5rem 1rem;
+        display: flex;
+        align-items: center;
+        
+        &:hover {
+            background-color: rgba(0, 0, 0, 0.05);
+            border-radius: 4px;
+        }
+    }
+    
+    .navbar-company-logo {
+        max-height: 32px;
+        width: auto;
+        margin-right: 10px;
+        transition: opacity 0.2s ease;
+        
+        &:hover {
+            opacity: 0.8;
+        }
+    }
+    
+    .navbar-company-logo-wrapper {
+        display: flex;
+        align-items: center;
+    }
+    
+    .navbar-company-text {
+        font-weight: 600;
+        color: var(--navbar-text-color, #333);
+        font-size: 0.9rem;
+    }
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+    .navbar-company-item {
+        .navbar-company-logo {
+            max-height: 24px;
+        }
+        
+        .navbar-company-text {
+            font-size: 0.8rem;
+        }
+    }
+}
+
+// Dark theme support
+.theme-dark {
+    .navbar-company-text {
+        color: var(--navbar-text-color-dark, #fff);
+    }
+}
+

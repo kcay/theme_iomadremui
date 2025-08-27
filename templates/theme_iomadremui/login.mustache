@@ -1,0 +1,295 @@
+{{!
+    IOMAD RemUI Login Template - Enhanced with Company Background Support
+    Follows RemUI standard login layout with multi-tenant customizations
+}}
+{{> theme_remui/head }}
+
+<body {{{ bodyattributes }}}>
+{{> core/local/toast/wrapper}}
+
+{{! Company-specific login background and styling }}
+{{#company}}
+<style>
+/* Company {{id}} login customizations */
+.company-{{id}}.pagelayout-login #page {
+    {{#has_background}}
+    background: url('{{{background}}}') !important;
+    background-position: center top !important;
+    background-size: cover !important;
+    background-attachment: fixed !important;
+    {{/has_background}}
+    {{^has_background}}
+    background: linear-gradient(135deg, {{primarycolor}}, {{signuptextcolor}}) !important;
+    {{/has_background}}
+    z-index: 0;
+    width: 100%;
+    padding: 0;
+}
+
+.company-{{id}} .login-wrapper {
+    backdrop-filter: blur(10px);
+    border-radius: 1rem;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+}
+
+.company-{{id}} .login-description {
+    color: {{signuptextcolor}} !important;
+}
+
+.company-{{id}} .login-description-content {
+    color: {{signuptextcolor}} !important;
+}
+
+.company-{{id}} .navbar-brand-logo {
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+}
+
+/* Centered login style */
+{{#is_centered_style}}
+.company-{{id}}.pagelayout-login .login-wrapper {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90%;
+    max-width: 400px;
+}
+{{/is_centered_style}}
+
+/* Split login style */
+{{#is_split_style}}
+.company-{{id}}.pagelayout-login #page {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    min-height: 100vh;
+}
+
+.company-{{id}} .login-wrapper {
+    background: none !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: none;
+}
+
+.login-welcome-wrapper{
+    display:none !important;
+}
+
+.company-{{id}} .login-image-panel {
+    {{#has_background}}
+    background: url('{{{background}}}');
+    background-position: center;
+    background-size: cover;
+    {{/has_background}}
+    {{^has_background}}
+    background: linear-gradient(135deg, {{primarycolor}}, {{signuptextcolor}});
+    {{/has_background}}
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    text-align: center;
+    padding: 2rem;
+}
+
+@media (max-width: 768px) {
+    .company-{{id}}.pagelayout-login #page {
+        grid-template-columns: 1fr;
+    }
+    
+    .company-{{id}} .login-image-panel {
+        display: none;
+    }
+}
+{{/is_split_style}}
+</style>
+{{/company}}
+
+{{! Default RemUI login background for non-company logins }}
+{{^company}}
+<style>
+.pagelayout-login #page {
+    background: url('{{config.wwwroot}}/pluginfile.php/1/theme_remui/loginsettingpic/{{config.themerev}}/laptop-computer-stack.jpg');
+    background-position: center top;
+    background-size: cover;
+    background-attachment: fixed;
+    z-index: 0;
+    width: 100%;
+    padding: 0;
+}
+</style>
+{{/company}}
+
+<div id="page-wrapper">
+    {{{ output.standard_top_of_body_html }}}
+
+    <div id="page" class="container-fluid mt-0">
+        
+        {{! Split layout - Add image panel for split style }}
+        {{#company}}
+        {{#is_split_style}}
+        <div class="login-image-panel">
+            <div class="login-image-content">
+                {{#logo}}
+                <div class="logo-area mb-4">
+                    <img src="{{{logo}}}" class="img-fluid" style="max-height: 100px;" alt="{{sitename}}">
+                </div>
+                {{/logo}}
+                
+                {{#login_tagline}}
+                <h2 class="text-white mb-3">{{{login_tagline}}}</h2>
+                {{/login_tagline}}
+                
+                {{#welcome_message}}
+                <div class="welcome-text">
+                    {{{welcome_message}}}
+                </div>
+                {{/welcome_message}}
+            </div>
+        </div>
+        {{/is_split_style}}
+        {{/company}}
+
+        <div id="page-content" class="row">
+            <div id="region-main-box" class="col-12">
+                <section id="region-main" class="col-12 h-100" aria-label="{{#str}}content{{/str}}">
+                    <div class="login-wrapper">
+                        <div class="login-container">
+                            {{#logocontext}}
+                            {{#incontainer}}
+                            <div class="logo-area r-mb-16">
+                                {{#logourl}}
+                                    <img src="{{ logourl }}" class="navbar-brand-logo logo" alt="{{sitename}}">
+                                {{/logourl}}
+
+                                {{#logominiurl}}
+                                    <img src="{{ logominiurl }}" class="navbar-brand-logo logomini" alt="{{sitename}}">
+                                {{/logominiurl}}
+
+                                {{#icononly}}
+                                    <span class="navbar-brand-logo icononly" style="color: {{color}};"><i class="fa fa-{{siteicon}}"></i></span>
+                                {{/icononly}}
+
+                                {{#iconwithsitename}}
+                                    <span class="navbar-brand-logo font-weight-bold iconsitename" style="color: {{color}};">
+                                        <i class="fa fa-{{siteicon}}"></i>&nbsp;
+                                        {{{ sitename }}}
+                                    </span>
+                                {{/iconwithsitename}}
+                            </div>
+                            {{/incontainer}}
+                            {{/logocontext}}
+                            
+                            {{! Company welcome message for non-split layouts }}
+                            {{#company}}
+                            {{^is_split_style}}
+                            {{#welcome_message}}
+                            <div class="welcome-message text-center mb-4" style="color: {{signuptextcolor}};">
+                                {{{welcome_message}}}
+                            </div>
+                            {{/welcome_message}}
+                            {{/is_split_style}}
+                            {{/company}}
+                            
+                            {{{ output.main_content }}}
+                        </div>
+                        
+                        {{#canshowdesc}}
+                        <div class="login-description-container">
+                            {{#logocontext}}
+                                {{^incontainer}}
+                                <div class="logo-area r-mb-4 bg-transparent">
+                                    {{#logourl}}
+                                        <img src="{{ logourl }}" class="navbar-brand-logo logo" alt="{{sitename}}">
+                                    {{/logourl}}
+
+                                    {{#logominiurl}}
+                                        <img src="{{ logominiurl }}" class="navbar-brand-logo logomini" alt="{{sitename}}">
+                                    {{/logominiurl}}
+
+                                    {{#icononly}}
+                                        <span class="navbar-brand-logo icononly" style="color: {{color}};"><i class="fa fa-{{siteicon}}"></i></span>
+                                    {{/icononly}}
+
+                                    {{#iconwithsitename}}
+                                        <span class="navbar-brand-logo font-weight-bold iconsitename" style="color: {{color}};">
+                                            <i class="fa fa-{{siteicon}}"></i>&nbsp;
+                                            {{{ sitename }}}
+                                        </span>
+                                    {{/iconwithsitename}}
+                                </div>
+                                {{/incontainer}}
+                            {{/logocontext}}
+                            
+                            {{#brandlogotext}}
+                            <div class="login-description">
+                                <div class="login-description-content" style="color: {{signuptextcolor}};">
+                                    {{{brandlogotext}}}
+                                </div>
+                                <a id="readmorebtn" class="d-none readbtn text-link-semibold" style="color: {{signuptextcolor}}">{{#str}} showmore, theme_remui{{/str}}</a>
+                                <a id="readlessbtn" class="d-none readbtn text-link-semibold" style="color: {{signuptextcolor}}">{{#str}} showless, theme_remui{{/str}}</a>
+                            </div>
+                            {{/brandlogotext}}
+                        </div>
+                        {{/canshowdesc}}
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+    {{> theme_remui/footer }}
+</div>
+
+{{! Load fonts if available }}
+{{#fonts}}
+{{{ fonts }}}
+{{/fonts}}
+
+{{! RemUI JavaScript for login page functionality }}
+{{#js}}
+M.util.js_pending('theme_remui/loader');
+require(['theme_remui/loader'], function() {
+    M.util.js_complete('theme_remui/loader');
+    var summaryheight = $('.login-description-content').height();
+
+    if (summaryheight > 295 && $(window).width() < 576) {
+        $('.login-description').find('#readmorebtn').removeClass('d-none');
+        $('.login-description-content').addClass('summary-collapsed').removeClass('summary-expanded');
+    }
+    $('.login-description #readmorebtn').on('click', function() {
+        $('.login-description-content').addClass('summary-expanded').removeClass('summary-collapsed');
+        $('.login-description').find('#readmorebtn').addClass('d-none');
+        $('.login-description').find('#readlessbtn').removeClass('d-none');
+    });
+    $('.login-description #readlessbtn').on('click', function () {
+        $('.login-description-content').addClass('summary-collapsed').removeClass('summary-expanded');
+        $('.login-description').find('#readmorebtn').removeClass('d-none');
+        $('.login-description').find('#readlessbtn').addClass('d-none');
+    });
+});
+
+{{! Company-specific login enhancements }}
+{{#company}}
+require(['jquery'], function($) {
+    // Add smooth entrance animation
+   // $('.login-wrapper').hide().fadeIn(800);
+    
+    // Enhanced form styling for company login
+    //$('.login-container form').addClass('company-login-form');
+    
+    // Auto-focus first input
+   // $('.login-container input:visible:first').focus();
+    
+    {{#is_split_style}}
+    // Split layout adjustments
+    if ($(window).width() > 768) {
+      //  $('.login-image-panel').animate({opacity: 1}, 1000);
+    }
+    {{/is_split_style}}
+});
+{{/company}}
+{{/js}}
+
+</body>
+</html>
